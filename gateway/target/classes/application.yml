@@ -1,0 +1,90 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: user-management-and-authentication
+          uri: http://localhost:8082
+          predicates:
+            - Path=/users/**, 
+        - id: profile-management
+          uri: http://localhost:8083
+          predicates:
+            - Path=/profiles/**, 
+        - id: matching-and-recommendation
+          uri: http://localhost:8085
+          predicates:
+            - Path=/matches/**, 
+        - id: chat-and-social-features
+          uri: http://localhost:8088
+          predicates:
+            - Path=/chats/**, /socialFeeds/**, 
+        - id: location-based-service-management
+          uri: http://localhost:8092
+          predicates:
+            - Path=, 
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: user-management-and-authentication
+          uri: http://userManagementAndAuthentication:8080
+          predicates:
+            - Path=/users/**, 
+        - id: profile-management
+          uri: http://profileManagement:8080
+          predicates:
+            - Path=/profiles/**, 
+        - id: matching-and-recommendation
+          uri: http://matchingAndRecommendation:8080
+          predicates:
+            - Path=/matches/**, 
+        - id: chat-and-social-features
+          uri: http://chatAndSocialFeatures:8080
+          predicates:
+            - Path=/chats/**, /socialFeeds/**, 
+        - id: location-based-service-management
+          uri: http://locationBasedServiceManagement:8080
+          predicates:
+            - Path=, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
